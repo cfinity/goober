@@ -1,14 +1,15 @@
 import { css } from './css';
 import { parse } from './core/parse';
 
-let h, useTheme, fwdProp;
-function setup(pragma, prefix, theme, forwardProps) {
+let h, useTheme, useMedia, fwdProp;
+function setup(pragma, prefix, theme, media, forwardProps) {
     // This one needs to stay in here, so we won't have cyclic dependencies
     parse.p = prefix;
 
     // These are scope to this context
     h = pragma;
     useTheme = theme;
+    useMedia = media;
     fwdProp = forwardProps;
 }
 
@@ -31,7 +32,14 @@ function styled(tag, forwardRef) {
             let _previousClassName = _props.className || Styled.className;
 
             // _ctx.p: is the props sent to the context
-            _ctx.p = Object.assign({ theme: useTheme && useTheme() }, _props);
+            _ctx.p = Object.assign({ 
+                theme: useTheme && useTheme(), 
+                media: useMedia && useMedia(), 
+                fonts: useTheme && useTheme().fonts(), 
+                colors: useTheme && useTheme().colors, 
+                size: useTheme && useTheme().size,
+                buttonSize: useTheme && useTheme().buttonSize,
+            }, _props);
 
             // Set a flag if the current components had a previous className
             // similar to goober. This is the append/prepend flag
