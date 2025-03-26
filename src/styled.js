@@ -31,15 +31,22 @@ function styled(tag, forwardRef) {
             // Keep a local reference to the previous className
             let _previousClassName = _props.className || Styled.className;
 
-            // _ctx.p: is the props sent to the context
-            _ctx.p = Object.assign({ 
-                theme: useTheme && useTheme(), 
-                media: useMedia && useMedia(), 
-                fonts: useTheme && useTheme().fonts(), 
-                colors: useTheme && useTheme().colors, 
-                size: useTheme && useTheme().size,
-                buttonSize: useTheme && useTheme().buttonSize,
-            }, _props);
+             // Get theme object
+             const themeObj = useTheme && useTheme();
+             const mediaObj = useMedia && useMedia();
+             
+             // _ctx.p: is the props sent to the context
+             // Add direct access to colors, media, and fonts
+             _ctx.p = {
+                 theme: themeObj,
+                 // Direct access to theme properties
+                 colors: themeObj?.newColors && themeObj.newColors(),
+                 media: mediaObj,
+                 fonts: themeObj?.fonts && themeObj.fonts(),
+                 size: themeObj?.size && themeObj.size,
+                 buttonSize: themeObj?.buttonSize && themeObj.buttonSize,
+                 ..._props
+             };
 
             // Set a flag if the current components had a previous className
             // similar to goober. This is the append/prepend flag

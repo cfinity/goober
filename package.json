@@ -1,6 +1,6 @@
 {
-  "name": "goober",
-  "version": "2.1.16",
+  "name": "@cfinity/goober",
+  "version": "1.0.1",
   "description": "A less than 1KB css-in-js solution",
   "sideEffects": false,
   "main": "dist/goober.cjs",
@@ -8,6 +8,9 @@
   "umd:main": "dist/goober.umd.js",
   "source": "src/index.js",
   "unpkg": "dist/goober.umd.js",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "types": "goober.d.ts",
   "type": "module",
   "files": [
