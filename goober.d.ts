@@ -16,8 +16,6 @@ declare namespace goober {
     type Media<T extends object> = keyof T extends never ? T : { media: T };
     type Fonts<T extends object> = keyof T extends never ? T : { fonts: T };
     type Colors<T extends object> = keyof T extends never ? T : { colors: T };
-    type Size<T extends object> = keyof T extends never ? T : { size: T };
-    type ButtonSize<T extends object> = keyof T extends never ? T : { buttonSize: T };
 
     interface StyledFunction {
         // used when creating a styled component from a native HTML element
@@ -30,16 +28,21 @@ declare namespace goober {
                 Theme<DefaultTheme> &
                 Media<DefaultMedia> &
                 Fonts<DefaultFonts> &
-                Colors<DefaultColors> &
-                Size<DefaultSize> &
-                ButtonSize<DefaultButtonSize>
+                Colors<DefaultColors>
         >;
 
         // used to extend other styled components. Inherits props from the extended component
         <PP extends Object = {}, P extends Object = {}>(
             tag: StyledVNode<PP>,
             forwardRef?: ForwardRefFunction
-        ): Tagged<PP & P & Theme<DefaultTheme> & Media<DefaultMedia> & Fonts<DefaultFonts> & Colors<DefaultColors> & Size<DefaultSize> & ButtonSize<DefaultButtonSize>>;
+        ): Tagged<
+            PP &
+                P &
+                Theme<DefaultTheme> &
+                Media<DefaultMedia> &
+                Fonts<DefaultFonts> &
+                Colors<DefaultColors>
+        >;
 
         // used when creating a component from a string (html native) but using a non HTML standard
         // component, such as when you want to style web components
@@ -61,9 +64,7 @@ declare namespace goober {
                 Theme<DefaultTheme> &
                 Media<DefaultMedia> &
                 Fonts<DefaultFonts> &
-                Colors<DefaultColors> &
-                Size<DefaultSize> &
-                ButtonSize<DefaultButtonSize>
+                Colors<DefaultColors>
         >;
     };
 
@@ -114,9 +115,15 @@ declare namespace goober {
             | number
             | ((props: P & PP) => CSSAttribute | string | number | false | undefined)
         >
-    ) => StyledVNode<Omit<P & PP,
-     keyof Theme<DefaultTheme>,
-    keyof Media<DefaultMedia>, keyof Fonts<DefaultFonts>, keyof Colors<DefaultColors>, keyof Size<DefaultSize>, keyof ButtonSize<DefaultButtonSize>>>
+    ) => StyledVNode<
+        Omit<
+            P & PP,
+            | keyof Theme<DefaultTheme>
+            | keyof Media<DefaultMedia>
+            | keyof Fonts<DefaultFonts>
+            | keyof Colors<DefaultColors>
+        >
+    >;
 
     interface CSSAttribute extends CSSProperties {
         [key: string]: CSSAttribute | string | number | undefined | null;
