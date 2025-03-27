@@ -13,22 +13,15 @@ on:
 
 jobs:
   publish-gpr:
-    runs-on:
-      [
-        self-hosted,
-        linux,
-        ARM64,
-        containered,
-        "${{ github.run_id }}_${{ github.run_number }}_${{ github.run_attempt }}",
-      ]
+    runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
     steps:
       - uses: actions/checkout@v3
-      - run: nvm install v20.10.0
-      - run: nvm alias default v20.10.0
-      - run: nvm use default
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '20.10.0'
       - run: echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
         env:
           NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
